@@ -2,7 +2,7 @@
 /build/
 /bin/
 */build/  # 忽略所有子目录中的build目录
-
+*/third/
 # 前端相关
 vue-frontend/node_modules/
 vue-frontend/.env
