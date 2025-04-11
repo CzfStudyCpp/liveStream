@@ -1,0 +1,1 @@
+/usr/bin/c++  -pthread -rdynamic CMakeFiles/user_service.dir/src/UserService.cpp.o CMakeFiles/user_service.dir/src/user.pb.cc.o CMakeFiles/user_service.dir/src/user.grpc.pb.cc.o -o user_service   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib: -lprotobuf -lgrpc++ -labsl_synchronization -lpthread 

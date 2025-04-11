@@ -1,0 +1,71 @@
+# 基础构建目录忽略
+/build/
+/bin/
+*/build/  # 忽略所有子目录中的build目录
+
+# 前端相关
+vue-frontend/node_modules/
+vue-frontend/.env
+vue-frontend/.env.local
+vue-frontend/.env.*.local
+vue-frontend/dist/
+vue-frontend/coverage/
+vue-frontend/.DS_Store
+
+# IDE和编辑器文件
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 依赖目录
+node_modules/
+bower_components/
+jspm_packages/
+
+# 缓存和临时文件
+.cache/
+.temp/
+.tmp/
+*.tmp
+*.bak
+*.swp
+
+# 环境文件
+.env
+.env.local
+.env.*.local
+
+
+# 包管理器锁定文件
+package-lock.json
+yarn.lock
+
+# 编译输出
+*.o
+*.a
+*.so
+*.dll
+*.exe
+*.out
+*.app
+
+
+# C/C++相关
+*.d
+*.ilk
+*.pdb
+*.obj

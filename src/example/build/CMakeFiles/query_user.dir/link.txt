@@ -1,0 +1,1 @@
+/usr/bin/c++  -pthread -rdynamic CMakeFiles/query_user.dir/src/QueryUser.cpp.o CMakeFiles/query_user.dir/src/user.pb.cc.o CMakeFiles/query_user.dir/src/user.grpc.pb.cc.o -o query_user   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib: -lprotobuf -lgrpc++ -labsl_synchronization -lpthread 

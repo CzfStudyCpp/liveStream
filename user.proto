@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package user;
+
+// UserService 服务定义
+service UserService {
+    // 查询用户信息
+    rpc QueryUser(QueryUserRequest) returns (QueryUserResponse);
+
+    // 发送短信验证码
+    rpc SendSMS(SendSMSRequest) returns (WebResponse);
+
+    // 手机验证码登录
+    rpc MobileLogin(MobileLoginRequest) returns (MobileLoginResponse);
+
+    // 验证 token
+    rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+
+   // 创建并返回登录 token
+    rpc CreateLoginToken(CreateLoginTokenRequest) returns (CreateLoginTokenResponse);
+}
+
+// 查询用户请求
+message QueryUserRequest {
+    int64 user_id = 1;  // 用户 ID
+}
+
+// 查询用户响应
+message QueryUserResponse {
+    UserDTO user = 1;  // 返回的用户信息
+}
+
+// 发送短信请求
+message SendSMSRequest {
+    string mobile = 1;  // 用户手机号码
+}
+
+// 统一响应格式
+message WebResponse {
+    int32 code = 1;     // 状态码
+    string message = 2; // 响应信息
+}
+
+// 手机验证码登录请求
+message MobileLoginRequest {
+    string mobile = 1;  // 手机号码
+    int32 code = 2;     // 验证码
+}
+
+// 手机验证码登录响应
+message MobileLoginResponse {
+    bool login_success = 1;  // 登录是否成功
+    string token = 2;        // 登录成功后返回的 token
+    string message = 3;      // 错误信息或其他提示
+}
+
+// 验证 Token 请求
+message ValidateTokenRequest {
+    string token = 1;   // 提供的 token
+}
+
+// 验证 Token 响应
+message ValidateTokenResponse {
+    bool is_valid = 1;  // token 是否有效
+    string user_id = 2; // 如果 token 有效，返回用户 ID
+    string message = 3; // 错误信息或其他提示
+}
+// 创建登录 Token 请求
+message CreateLoginTokenRequest {
+    int64 user_id = 1;  // 用户 ID
+}
+
+// 创建登录 Token 响应
+message CreateLoginTokenResponse {
+    string token = 1;   // 登录 Token
+}
+
+// 用户信息数据结构
+message UserDTO {
+    int64 user_id = 1;    // 用户 ID
+    string nick_name = 2;  // 昵称
+    string true_name = 3;  // 真实姓名
+    string avatar = 4;     // 头像
+    int32 sex = 5;         // 性别
+    string create_time = 6; // 创建时间
+    string update_time = 7; // 更新时间
+}
+
