@@ -1,0 +1,8 @@
+/home/czf/liveStream/src/build/CMakeFiles/liveStreamTranscoding.dir
+/home/czf/liveStream/src/build/CMakeFiles/run.dir
+/home/czf/liveStream/src/build/CMakeFiles/edit_cache.dir
+/home/czf/liveStream/src/build/CMakeFiles/rebuild_cache.dir
+/home/czf/liveStream/src/build/CMakeFiles/list_install_components.dir
+/home/czf/liveStream/src/build/CMakeFiles/install.dir
+/home/czf/liveStream/src/build/CMakeFiles/install/local.dir
+/home/czf/liveStream/src/build/CMakeFiles/install/strip.dir

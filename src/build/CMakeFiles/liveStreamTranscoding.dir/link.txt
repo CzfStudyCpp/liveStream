@@ -1,0 +1,1 @@
+/usr/bin/c++  -pthread -rdynamic CMakeFiles/liveStreamTranscoding.dir/liveStream/liveStream.cpp.o CMakeFiles/liveStreamTranscoding.dir/liveStream/StreamManager.cpp.o -o liveStreamTranscoding   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib: /usr/lib/x86_64-linux-gnu/libcrypto.so /usr/lib/x86_64-linux-gnu/libssl.so -lcpprest -lpthread /usr/lib/x86_64-linux-gnu/libcrypto.so 
