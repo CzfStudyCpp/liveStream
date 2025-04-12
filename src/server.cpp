@@ -4,6 +4,7 @@
 #include "user.grpc.pb.h"  // 引入 gRPC 生成的文件
 #include <grpcpp/grpcpp.h>
 
+#include "initTables.h"
 // 启动 gRPC 服务
 void RunServer() {
     std::string server_address("0.0.0.0:50051");
@@ -19,6 +20,8 @@ void RunServer() {
 }
 
 int main() {
+	//BusinessProcessor bus;
+	//bus.Init();
     RunServer();
     return 0;
 }

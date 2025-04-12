@@ -151,13 +151,18 @@ void UserServiceController::handle_create_login_token(web::http::http_request re
     }
     request.reply(response);
 }
-
 void RunHTTPServer(std::shared_ptr<UserServiceController> controller) {
     uri_builder uri(U("http://localhost:8080"));
     auto addr = uri.to_uri().to_string();
     http_listener listener(addr);
 
     listener.support(methods::POST, [controller](http_request request) {
+        // 在响应中添加CORS头
+        web::http::http_response response;
+        response.headers().add(U("Access-Control-Allow-Origin"), U("*"));
+        response.headers().add(U("Access-Control-Allow-Methods"), U("GET, POST, OPTIONS"));
+        response.headers().add(U("Access-Control-Allow-Headers"), U("Content-Type"));
+
         // 路由到不同的处理方法
         if (request.request_uri().path() == U("/user/queryUser")) {
             controller->handle_query_user(request);
@@ -168,7 +173,6 @@ void RunHTTPServer(std::shared_ptr<UserServiceController> controller) {
         } else if (request.request_uri().path() == U("/user/createLoginToken")) {
             controller->handle_create_login_token(request);
         } else {
-            web::http::http_response response;
             response.set_status_code(web::http::status_codes::NotFound);
             response.set_body("Not Found");
             request.reply(response);
@@ -189,3 +193,4 @@ void RunHTTPServer(std::shared_ptr<UserServiceController> controller) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
+

@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.3)
 # 项目名称
 project(UserService)
 
+# 设置 Protobuf 和 gRPC 库和头文件路径
+set(PROTOBUF_DIR "/usr/local")
+set(GRPC_DIR "/usr/local")
+
 # 设置 C++ 标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -24,55 +28,31 @@ set(PROTO_INCLUDE_PATHS
     /usr/local/include/absl     # absl 头文件路径
 )
 
-# 设置 hiredis 路径
-set(HIREDIS_INCLUDE_DIR "/usr/include/hiredis")
-set(HIREDIS_LIB_DIR "/usr/lib/x86_64-linux-gnu")
+# 设置库路径
+set(LIBRARY_PATHS
+    /usr/local/lib
+)
 
 # 查找 OpenSSL 和 cpprestsdk 库
 find_package(OpenSSL REQUIRED)
 find_package(cpprestsdk REQUIRED)
 
-# 查找 MySQL Connector 库
-# 手动设置 MySQL 头文件和库文件路径
-set(MySQL_INCLUDE_DIR "/usr/include/mysql")
-set(MySQL_LIBRARIES "/usr/lib/x86_64-linux-gnu/libmysqlclient.so")
-
-# 检查是否设置成功
-message(STATUS "MySQL include dir: ${MySQL_INCLUDE_DIR}")
-message(STATUS "MySQL libraries: ${MySQL_LIBRARIES}")
-message(STATUS "hiredis include dir: ${HIREDIS_INCLUDE_DIR}")
-message(STATUS "hiredis lib dir: ${HIREDIS_LIB_DIR}")
-
-# 设置库路径
-set(LIBRARY_PATHS
-    /usr/local/lib
-    ${HIREDIS_LIB_DIR}  # 添加 hiredis 库路径
-)
-
-set(SERVER_SRC
-    src/UserService.cpp
-    src/sqlConnect.cpp
-    src/user.cpp
-	src/redisConnect.cpp
-    # 添加其他源文件
-)
-
 # 添加可执行文件
-add_executable(user_service src/server.cpp ${PROTO_SRC} ${SERVER_SRC})
-add_executable(httpServer src/httpServer.cpp src/controller.cpp ${PROTO_SRC})
-add_executable(client src/client.cpp ${PROTO_SRC})
+add_executable(user_service src/server.cpp ${PROTO_SRC} src/UserService.cpp)
+add_executable(httpServer src/httpServer.cpp src/controller.cpp ${PROTO_SRC})  # 确保添加了生成的 Protobuf 文件
+add_executable(client src/client.cpp ${PROTO_SRC})  # 修改为 client 可执行文件
 
 # 设置头文件路径
-target_include_directories(user_service PRIVATE ${PROTO_INCLUDE_PATHS} ${MySQL_INCLUDE_DIR} ${HIREDIS_INCLUDE_DIR})
-target_include_directories(httpServer PRIVATE ${PROTO_INCLUDE_PATHS} ${MySQL_INCLUDE_DIR} ${HIREDIS_INCLUDE_DIR})
-target_include_directories(client PRIVATE ${PROTO_INCLUDE_PATHS} ${MySQL_INCLUDE_DIR} ${HIREDIS_INCLUDE_DIR})
+target_include_directories(user_service PRIVATE ${PROTO_INCLUDE_PATHS})
+target_include_directories(httpServer PRIVATE ${PROTO_INCLUDE_PATHS})
+target_include_directories(client PRIVATE ${PROTO_INCLUDE_PATHS})  # 新增 client 头文件路径
 
 # 设置库文件路径
 target_link_directories(user_service PRIVATE ${LIBRARY_PATHS})
 target_link_directories(httpServer PRIVATE ${LIBRARY_PATHS})
-target_link_directories(client PRIVATE ${LIBRARY_PATHS})
+target_link_directories(client PRIVATE ${LIBRARY_PATHS})  # 新增 client 库路径
 
-# 链接 Protobuf, gRPC, cpprestsdk, MySQL Connector 和 hiredis 库
+# 链接 Protobuf, gRPC 和 cpprestsdk 库
 target_link_libraries(user_service
     protobuf
     grpc++
@@ -81,8 +61,6 @@ target_link_libraries(user_service
     OpenSSL::Crypto
     OpenSSL::SSL
     cpprest
-    ${MySQL_LIBRARIES}
-    hiredis
 )
 
 target_link_libraries(httpServer
@@ -93,8 +71,6 @@ target_link_libraries(httpServer
     OpenSSL::Crypto
     OpenSSL::SSL
     cpprest
-    ${MySQL_LIBRARIES}
-    hiredis
 )
 
 target_link_libraries(client
@@ -105,14 +81,12 @@ target_link_libraries(client
     OpenSSL::Crypto
     OpenSSL::SSL
     cpprest
-    ${MySQL_LIBRARIES}
-    hiredis
 )
 
 # 安装时设置安装路径
 install(TARGETS user_service DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install(TARGETS httpServer DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install(TARGETS client DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS client DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)  # 安装 client
 
 # 创建一个 "run" 目标，用于运行所有可执行文件
 add_custom_target(run

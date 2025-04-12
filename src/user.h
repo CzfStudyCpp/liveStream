@@ -1,24 +1,36 @@
-#ifndef USER_SERVICE_IMPL_H
-#define USER_SERVICE_IMPL_H
+#ifndef USER_H
+#define USER_H
 
-#include "user.grpc.pb.h"  // gRPC 自动生成的服务类
-#include "service_interface.h"  // 自定义接口类
-#include <grpcpp/grpcpp.h>  // gRPC 库
+#include <string>
+#include <memory>
 
-// 实现 UserService 服务并继承 gRPC 的 Service 类
-class UserServiceImpl final : public user::UserService::Service, public UserServiceInterface {
+#include "dto.h"
+
+class User {
+	
+
 public:
-    // gRPC 服务方法
-    grpc::Status QueryUser(grpc::ServerContext* context, const user::QueryUserRequest* request, user::QueryUserResponse* response) override;
-    grpc::Status SendSMS(grpc::ServerContext* context, const user::SendSMSRequest* request, user::WebResponse* response) override;
-    grpc::Status MobileLogin(grpc::ServerContext* context, const user::MobileLoginRequest* request, user::MobileLoginResponse* response) override;
-    grpc::Status CreateLoginToken(grpc::ServerContext* context, const user::CreateLoginTokenRequest* request, user::CreateLoginTokenResponse* response) override;
+    // 构造函数，传入 MySQL 和 Redis 的连接句柄
+    User(){
+	
+	}
 
-    // 实现业务接口方法
-    grpc::Status QueryUser(int64_t user_id, user::QueryUserResponse* response) override;
-    grpc::Status SendSMS(const std::string& mobile, user::WebResponse* response) override;
-    grpc::Status MobileLogin(const std::string& mobile, int code, user::MobileLoginResponse* response) override;
-    grpc::Status CreateLoginToken(int64_t user_id, user::CreateLoginTokenResponse* response) override;
+    // 获取用户信息
+    bool GetUserInfo(int64_t user_id, userInfo &user_info);
+
+    // 生成验证码
+    bool GenerateVerificationCode(const std::string& phone, int& code);
+
+    // 验证码登录
+    bool VerifyCodeLogin(const std::string& phone, int code, bool& success, std::string& token);
+
+    // 创建登录 Token
+    bool CreateLoginToken(int64_t user_id, std::string& token);
+
+    // 验证登录 Token
+    bool ValidateLoginToken(const std::string& token);
+
+
 };
 
-#endif // USER_SERVICE_IMPL_H
+#endif // USER_H

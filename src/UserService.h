@@ -8,7 +8,9 @@
 #include <unordered_map>
 #include <string>
 
+
 class UserServiceImpl final : public user::UserService::Service,public UserServiceInterface {
+	
 public:
     // 查询用户信息
     grpc::Status QueryUser(grpc::ServerContext* context, const user::QueryUserRequest* request, user::QueryUserResponse* response) override;
